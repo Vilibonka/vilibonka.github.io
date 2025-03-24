@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastgele Kedi Fotoğrafı</title>
+</head>
+<body>
+    <h1>Rastgele Kedi Fotoğrafı</h1>
+    <button onclick="getCat()">Yeni Kedi Getir</button>
+    <br><br>
+    <img id="catImage" src="" width="300" alt="Kedi Fotoğrafı">
+
+    <script>
+        function getCat() {
+            fetch("https://api.thecatapi.com/v1/images/search")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("catImage").src = data[0].url;
+                })
+                .catch(error => console.error("Hata:", error));
+        }
+        getCat();
+    </script>
+</body>
+</html>
