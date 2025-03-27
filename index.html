@@ -11,6 +11,8 @@
         .green { background-color: #4CAF50; color: white; }
         .yellow { background-color: #FFC107; }
         .gray { background-color: #DDD; }
+        #dog-info { margin-top: 20px; text-align: center; }
+        #dog-info img { width: 300px; height: auto; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -22,6 +24,12 @@
     <p id="message"></p>
     <button id="restartBtn" onclick="restartGame()" style="display: none;">Tekrar Başla</button>
 
+    <div id="dog-info" style="display: none;">
+        <h3>Köpek Bilgisi:</h3>
+        <img id="dog-image" src="" alt="Köpek Resmi">
+        <p id="dog-description"></p>
+    </div>
+
     <script>
         let secretWord = ""; // Başlangıçta boş
         let attempts = 0;
@@ -29,6 +37,9 @@
         const gridContainer = document.getElementById("grid-container");
         const guessInput = document.getElementById("guess");
         const restartBtn = document.getElementById("restartBtn");
+        const dogInfoDiv = document.getElementById("dog-info");
+        const dogImage = document.getElementById("dog-image");
+        const dogDescription = document.getElementById("dog-description");
 
         async function fetchRandomDogBreed() {
             try {
@@ -42,6 +53,21 @@
             } catch (error) {
                 console.error("API hatası:", error);
                 alert("Köpek verisi alınamadı. Lütfen tekrar deneyin.");
+            }
+        }
+
+        async function fetchDogInfo(breed) {
+            try {
+                const response = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`);
+                const data = await response.json();
+                const dogImageUrl = data.message;
+                dogImage.src = dogImageUrl;
+
+                // Köpek hakkında açıklama ekleyelim
+                dogDescription.textContent = `${breed.charAt(0).toUpperCase() + breed.slice(1)} köpeği hakkında bazı bilgiler...`;
+                dogInfoDiv.style.display = "block";
+            } catch (error) {
+                console.error("Köpek bilgisi alınamadı:", error);
             }
         }
 
@@ -86,10 +112,12 @@
             if (guess === secretWord) {
                 document.getElementById("message").textContent = "Tebrikler! Doğru tahmin: " + secretWord;
                 guessInput.disabled = true;
+                fetchDogInfo(secretWord); // Doğru tahmin yapıldığında köpek bilgilerini göster
                 restartBtn.style.display = "block"; // Tekrar başla butonunu göster
             } else if (attempts >= maxAttempts) {
                 document.getElementById("message").textContent = "Oyun bitti! Doğru kelime: " + secretWord;
                 guessInput.disabled = true;
+                fetchDogInfo(secretWord); // Oyun bittiğinde doğru köpek bilgilerini göster
                 restartBtn.style.display = "block"; // Tekrar başla butonunu göster
             }
         }
@@ -98,6 +126,7 @@
             // Oyunu sıfırla
             attempts = 0;
             gridContainer.innerHTML = ""; // Eskileri temizle
+            dogInfoDiv.style.display = "none"; // Köpek bilgisi kısmını gizle
             document.getElementById("message").textContent = "";
             guessInput.disabled = false;
             guessInput.value = "";
