@@ -6,19 +6,19 @@
     <title>Köpek İsmi Tahmini</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
-        .grid {
-    display: grid;
-    gap: 5px;
-    justify-content: center;
-    margin-top: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Hücrelerin boyutunu dinamik hale getirmek için */
-}
-
+        .grid { display: grid; grid-template-columns: repeat(5, 50px); gap: 5px; justify-content: center; margin-top: 20px; }
         .cell { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid #333; }
         .green { background-color: #4CAF50; color: white; }
         .yellow { background-color: #FFC107; }
         .gray { background-color: #DDD; }
-        #dogImage { width: 300px;  margin-top: 20px; display: block; margin-left: auto; margin-right: auto; }
+        #dogImage {
+            width: 300px; 
+            margin-top: 20px; /* Bu değeri artırabilir veya azaltabilirsiniz */
+            display: block;   /* Fotoğrafı blok seviyesinde yaparak ortalamayı sağlarız */
+            margin-left: auto; /* Ortalamak için */
+            margin-right: auto; /* Ortalamak için */
+        }
+
     </style>
 </head>
 <body>
@@ -65,21 +65,21 @@
                 alert("Bir tahminde bulunun!");
                 return;
             }
-        
+
             if (guess.length !== secretWord.length) {
-                alert(`Lütfen ${secretWord.length} harfli bir kelime girin!`);
+                alert(Lütfen ${secretWord.length} harfli bir kelime girin!);
                 return;
             }
-        
+
             let row = document.createElement("div");
             row.className = "grid";
-        
+
             // Kullanıcı girdiği harfleri tek tek kontrol et
             for (let i = 0; i < guess.length; i++) {
                 let cell = document.createElement("div");
                 cell.className = "cell";
                 cell.textContent = guess[i];
-        
+
                 if (guess[i] === secretWord[i]) {
                     cell.classList.add("green");
                 } else if (secretWord.includes(guess[i])) {
@@ -89,11 +89,11 @@
                 }
                 row.appendChild(cell);
             }
-        
+
             gridContainer.appendChild(row);
             attempts++;
             guessInput.value = "";
-        
+
             if (guess === secretWord) {
                 document.getElementById("message").textContent = "Tebrikler! Doğru tahmin: " + secretWord;
                 guessInput.disabled = true;
@@ -106,9 +106,10 @@
                 fetchDogImage(); // Oyun bittiğinde köpeğin fotoğrafını göster
             }
         }
+
         async function fetchDogImage() {
             try {
-                const response = await fetch(`https://dog.ceo/api/breed/${secretWord}/images/random`);
+                const response = await fetch(https://dog.ceo/api/breed/${secretWord}/images/random);
                 const data = await response.json();
                 const dogImageUrl = data.message;
                 dogImage.src = dogImageUrl;
