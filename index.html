@@ -20,6 +20,7 @@
     <button onclick="checkGuess()">Tahmin Yap</button>
     <div id="grid-container"></div>
     <p id="message"></p>
+    <button id="restartBtn" onclick="restartGame" style="display: none;">Tekrar Başla</button>
 
     <script>
         let secretWord = ""; // Başlangıçta boş
@@ -27,6 +28,7 @@
         const maxAttempts = 6;
         const gridContainer = document.getElementById("grid-container");
         const guessInput = document.getElementById("guess");
+        const restartBtn = document.getElementById("restartBtn");
 
         async function fetchRandomDogBreed() {
             try {
@@ -61,20 +63,39 @@
             let row = document.createElement("div");
             row.className = "grid";
 
-            // Kullanıcı girdiği harfleri tek tek kontrol et
-            for (let i = 0; i < guess.length; i++) {
-                let cell = document.createElement("div");
-                cell.className = "cell";
-                cell.textContent = guess[i];
+            let secretWordCopy = secretWord.split(""); // secretWord'i kopyalayarak işlem yapacağız
+            let guessCopy = guess.split(""); // Kullanıcı tahminini kopyalayacağız
 
+            // İlk olarak, doğru yerlerdeki harfleri yeşil yapalım
+            for (let i = 0; i < secretWord.length; i++) {
                 if (guess[i] === secretWord[i]) {
-                    cell.classList.add("green");
-                } else if (secretWord.includes(guess[i])) {
-                    cell.classList.add("yellow");
-                } else {
-                    cell.classList.add("gray");
+                    let cell = document.createElement("div");
+                    cell.className = "cell green";
+                    cell.textContent = guess[i];
+                    row.appendChild(cell);
+                    secretWordCopy[i] = null; // Bu harf artık işaretlendi, kullanmamız gereken harfleri null yapalım
+                    guessCopy[i] = null; // Kullanıcı da bu harfi doğru tahmin etti
                 }
-                row.appendChild(cell);
+            }
+
+            // Şimdi, diğer harfler için sarı veya gri rengini kontrol edelim
+            for (let i = 0; i < secretWord.length; i++) {
+                if (guessCopy[i] !== null) { // Eğer bu harf daha önce işaretlenmediyse
+                    let cell = document.createElement("div");
+                    if (secretWordCopy.includes(guessCopy[i])) {
+                        cell.className = "cell yellow"; // Harf doğru yer değil, ama var
+                    } else {
+                        cell.className = "cell gray"; // Harf doğru değil
+                    }
+                    cell.textContent = guessCopy[i];
+                    row.appendChild(cell);
+
+                    // Kullanıcı doğru harfi tahmin ettiyse, harfi artık işaretlememek için sıfırlayalım
+                    if (secretWordCopy.includes(guessCopy[i])) {
+                        const index = secretWordCopy.indexOf(guessCopy[i]);
+                        secretWordCopy[index] = null; // Harfi bir kere kullanalım
+                    }
+                }
             }
 
             gridContainer.appendChild(row);
@@ -84,10 +105,25 @@
             if (guess === secretWord) {
                 document.getElementById("message").textContent = "Tebrikler! Doğru tahmin: " + secretWord;
                 guessInput.disabled = true;
+                restartBtn.style.display = "block"; // Tekrar başla butonunu göster
             } else if (attempts >= maxAttempts) {
                 document.getElementById("message").textContent = "Oyun bitti! Doğru kelime: " + secretWord;
                 guessInput.disabled = true;
+                restartBtn.style.display = "block"; // Tekrar başla butonunu göster
             }
+        }
+
+        function restartGame() {
+            // Oyunu sıfırla
+            attempts = 0;
+            gridContainer.innerHTML = ""; // Eskileri temizle
+            document.getElementById("message").textContent = "";
+            guessInput.disabled = false;
+            guessInput.value = "";
+            restartBtn.style.display = "none"; // Tekrar başla butonunu gizle
+
+            // Yeni bir köpek ismi al
+            fetchRandomDogBreed();
         }
     </script>
 </body>
