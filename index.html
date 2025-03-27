@@ -7,10 +7,15 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         .grid {
-            display: flex; /* Flexbox ile düzenleme */
-            flex-wrap: wrap; /* Satır başına geçmesini engeller */
-            justify-content: center; /* Ortalamayı sağlar */
+            display: grid;
+            grid-template-columns: repeat(5, 50px); /* 5 kutucuk yan yana */
+            gap: 5px;
+            justify-content: center;
             margin-top: 20px;
+            flex-wrap: wrap; /* Satır başına geçmesini engeller */
+            display: flex; /* Flexbox ile düzenleme */
+            flex-direction: row; /* Kutucukları yan yana hizalar */
+            justify-content: center; /* Ortalamayı sağlar */
         }
         .cell {
             width: 50px;
