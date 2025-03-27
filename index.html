@@ -6,12 +6,14 @@
     <title>Köpek İsmi Tahmini</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(5, 50px); gap: 5px; justify-content: center; margin-top: 20px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 50px); gap: 5px; justify-content: center; margin-top: 20px; flex-wrap: wrap; display: flex; flex-direction: row; justify-content: center; }
         .cell { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid #333; }
         .green { background-color: #4CAF50; color: white; }
         .yellow { background-color: #FFC107; }
         .gray { background-color: #DDD; }
-        #dogImage { width: 200px; margin-top: 20px; display: none; }
+        #dogImage { width: 300px; margin-top: 20px; display: none; } /* Resim boyutunu artırdım */
     </style>
 </head>
 <body>
