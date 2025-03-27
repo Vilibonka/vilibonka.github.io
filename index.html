@@ -7,8 +7,9 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         .grid {
-            display: flex; /* Flexbox ile düzenleme */
-            flex-wrap: wrap; /* Satır başına geçmesini engeller */
+            display: grid; /* Grid düzeni kullanıyoruz */
+            grid-template-columns: repeat(5, 50px); /* 5 kutudan oluşan bir sütun düzeni */
+            gap: 5px; /* Kutular arasındaki boşluk */
             justify-content: center; /* Ortalamayı sağlar */
             margin-top: 20px;
         }
@@ -24,7 +25,13 @@
         .green { background-color: #4CAF50; color: white; }
         .yellow { background-color: #FFC107; }
         .gray { background-color: #DDD; }
-        #dogImage { width: 300px; margin-top: 20px; display: none; } /* Resim boyutunu artırdım */
+        #dogImage { 
+            width: 300px; 
+            margin-top: 20px; 
+            display: none; 
+            margin-left: auto; 
+            margin-right: auto; /* Resmi yatayda ortalar */
+        }
     </style>
 </head>
 <body>
