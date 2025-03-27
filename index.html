@@ -84,14 +84,24 @@
             }
 
             for (let i = 0; i < guess.length; i++) {
-                if (!usedIndices.has(i) && secretWordArray.includes(guess[i])) {
+                let cell = document.createElement("div"); // Her harf için yeni bir hücre oluşturulmalı
+                cell.className = "cell";
+                cell.textContent = guess[i];
+            
+                if (guess[i] === secretWord[i]) {
+                    cell.classList.add("green");
+                    usedIndices.add(i);
+                    secretWordArray[i] = null;
+                } else if (secretWordArray.includes(guess[i]) && !usedIndices.has(i)) {
                     cell.classList.add("yellow");
                     secretWordArray[secretWordArray.indexOf(guess[i])] = null;
-                } else if (!usedIndices.has(i)) {
+                } else {
                     cell.classList.add("gray");
                 }
+            
                 row.appendChild(cell);
             }
+
 
             gridContainer.appendChild(row);
             attempts++;
