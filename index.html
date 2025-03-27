@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Köpek Tahmin Oyunu</title>
+    <title>Köpek İsmi Tahmini</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         .grid { display: grid; grid-template-columns: repeat(5, 50px); gap: 5px; justify-content: center; margin-top: 20px; }
@@ -15,8 +15,8 @@
 </head>
 <body>
     <h1>Köpek İsmi Tahmini</h1>
-    <p>5 harfli bir köpek ismi tahmin edin!</p>
-    <input type="text" id="guess" maxlength="5">
+    <p>Köpek ismini tahmin edin!</p>
+    <input type="text" id="guess" maxlength="50">
     <button onclick="checkGuess()">Tahmin Yap</button>
     <div id="grid-container"></div>
     <p id="message"></p>
@@ -29,10 +29,10 @@
 
         async function fetchRandomDogBreed() {
             try {
-                const response = await fetch("https://dog.ceo/api/breeds/image/random");
+                const response = await fetch("https://dog.ceo/api/breeds/list/all");
                 const data = await response.json();
-                const breed = data.message.split("/")[4]; // Köpek ırkının ismini çıkar
-                secretWord = breed.toLowerCase().substring(0, 5); // İlk 5 harfi al
+                const breeds = Object.keys(data.message); // Tüm köpek ırklarını al
+                secretWord = breeds[Math.floor(Math.random() * breeds.length)].toLowerCase(); // Rastgele bir köpek ismi seç
             } catch (error) {
                 console.error("API hatası:", error);
                 alert("Köpek verisi alınamadı. Lütfen tekrar deneyin.");
@@ -45,15 +45,16 @@
         function checkGuess() {
             const guessInput = document.getElementById("guess");
             const guess = guessInput.value.toLowerCase();
-            if (guess.length !== 5) {
-                alert("5 harfli bir kelime girin!");
+            if (guess.length === 0) {
+                alert("Bir tahminde bulunun!");
                 return;
             }
 
             let row = document.createElement("div");
             row.className = "grid";
 
-            for (let i = 0; i < 5; i++) {
+            // Kullanıcı girdiği harfleri tek tek kontrol et
+            for (let i = 0; i < guess.length; i++) {
                 let cell = document.createElement("div");
                 cell.className = "cell";
                 cell.textContent = guess[i];
