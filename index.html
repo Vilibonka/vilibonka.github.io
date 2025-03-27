@@ -63,39 +63,20 @@
             let row = document.createElement("div");
             row.className = "grid";
 
-            let secretWordCopy = secretWord.split(""); // secretWord'i kopyalayarak işlem yapacağız
-            let guessCopy = guess.split(""); // Kullanıcı tahminini kopyalayacağız
+            // Kullanıcı girdiği harfleri tek tek kontrol et
+            for (let i = 0; i < guess.length; i++) {
+                let cell = document.createElement("div");
+                cell.className = "cell";
+                cell.textContent = guess[i];
 
-            // İlk olarak, doğru yerlerdeki harfleri yeşil yapalım
-            for (let i = 0; i < secretWord.length; i++) {
                 if (guess[i] === secretWord[i]) {
-                    let cell = document.createElement("div");
-                    cell.className = "cell green";
-                    cell.textContent = guess[i];
-                    row.appendChild(cell);
-                    secretWordCopy[i] = null; // Bu harf artık işaretlendi, kullanmamız gereken harfleri null yapalım
-                    guessCopy[i] = null; // Kullanıcı da bu harfi doğru tahmin etti
+                    cell.classList.add("green");
+                } else if (secretWord.includes(guess[i])) {
+                    cell.classList.add("yellow");
+                } else {
+                    cell.classList.add("gray");
                 }
-            }
-
-            // Şimdi, diğer harfler için sarı veya gri rengini kontrol edelim
-            for (let i = 0; i < secretWord.length; i++) {
-                if (guessCopy[i] !== null) { // Eğer bu harf daha önce işaretlenmediyse
-                    let cell = document.createElement("div");
-                    if (secretWordCopy.includes(guessCopy[i])) {
-                        cell.className = "cell yellow"; // Harf doğru yer değil, ama var
-                    } else {
-                        cell.className = "cell gray"; // Harf doğru değil
-                    }
-                    cell.textContent = guessCopy[i];
-                    row.appendChild(cell);
-
-                    // Kullanıcı doğru harfi tahmin ettiyse, harfi artık işaretlememek için sıfırlayalım
-                    if (secretWordCopy.includes(guessCopy[i])) {
-                        const index = secretWordCopy.indexOf(guessCopy[i]);
-                        secretWordCopy[index] = null; // Harfi bir kere kullanalım
-                    }
-                }
+                row.appendChild(cell);
             }
 
             gridContainer.appendChild(row);
