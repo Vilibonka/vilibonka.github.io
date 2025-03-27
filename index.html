@@ -67,6 +67,10 @@
             let row = document.createElement("div");
             row.className = "grid";
 
+            let secretWordArray = secretWord.split("");
+            let guessArray = guess.split("");
+            let usedIndices = new Set();
+
             for (let i = 0; i < guess.length; i++) {
                 let cell = document.createElement("div");
                 cell.className = "cell";
@@ -74,9 +78,16 @@
 
                 if (guess[i] === secretWord[i]) {
                     cell.classList.add("green");
-                } else if (secretWord.includes(guess[i])) {
+                    usedIndices.add(i);
+                    secretWordArray[i] = null;
+                }
+            }
+
+            for (let i = 0; i < guess.length; i++) {
+                if (!usedIndices.has(i) && secretWordArray.includes(guess[i])) {
                     cell.classList.add("yellow");
-                } else {
+                    secretWordArray[secretWordArray.indexOf(guess[i])] = null;
+                } else if (!usedIndices.has(i)) {
                     cell.classList.add("gray");
                 }
                 row.appendChild(cell);
