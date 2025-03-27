@@ -16,7 +16,7 @@
 <body>
     <h1>Köpek İsmi Tahmini</h1>
     <p>Köpek ismini tahmin edin!</p>
-    <input type="text" id="guess" maxlength="50">
+    <input type="text" id="guess">
     <button onclick="checkGuess()">Tahmin Yap</button>
     <div id="grid-container"></div>
     <p id="message"></p>
@@ -26,6 +26,7 @@
         let attempts = 0;
         const maxAttempts = 6;
         const gridContainer = document.getElementById("grid-container");
+        const guessInput = document.getElementById("guess");
 
         async function fetchRandomDogBreed() {
             try {
@@ -33,6 +34,9 @@
                 const data = await response.json();
                 const breeds = Object.keys(data.message); // Tüm köpek ırklarını al
                 secretWord = breeds[Math.floor(Math.random() * breeds.length)].toLowerCase(); // Rastgele bir köpek ismi seç
+
+                // Tahminin uzunluğunu belirle
+                guessInput.maxLength = secretWord.length;
             } catch (error) {
                 console.error("API hatası:", error);
                 alert("Köpek verisi alınamadı. Lütfen tekrar deneyin.");
@@ -43,10 +47,14 @@
         fetchRandomDogBreed();
 
         function checkGuess() {
-            const guessInput = document.getElementById("guess");
             const guess = guessInput.value.toLowerCase();
             if (guess.length === 0) {
                 alert("Bir tahminde bulunun!");
+                return;
+            }
+
+            if (guess.length !== secretWord.length) {
+                alert(`Lütfen ${secretWord.length} harfli bir kelime girin!`);
                 return;
             }
 
